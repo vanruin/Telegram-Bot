@@ -2,8 +2,9 @@ import requests
 import os
 from flask import Flask, request
 
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Use environment variable
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "7427321931:AAFjEU2DXUA19EvlW-kOLT-C5dXsY_UCwSI")  
 URL = f"https://api.telegram.org/bot{TOKEN}/"
+
 app = Flask(__name__)
 
 def send_message(chat_id, text):
@@ -41,7 +42,7 @@ def process_message(update):
         else:
             send_message(chat_id, "Usage: /question <your question>")
     elif photos:
-        file_id = photos[-1]["file_id"]
+        file_id = photos[-1]["file_id"]  # Get the highest quality image
         file_info = requests.get(URL + f"getFile?file_id={file_id}").json()
         if "result" in file_info:
             file_path = file_info["result"]["file_path"]
